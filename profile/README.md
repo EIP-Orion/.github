@@ -113,20 +113,53 @@ go build ./cmd/agent
 
 ## 📈 Roadmap
 
-Deployment is structured across four milestones for a controlled, scalable roll-out:
+Orion's development follows a decoupled, repository-specific strategy to ensure a high-performance, production-ready release by **July 2027**.
 
-```
-  M1                M2                 M3                 M4
-  ●─────────────────●──────────────────●──────────────────●
-  Mar 2026          Oct 2026           Mar 2027           Jun 2027
+### 🗓️ Global Release Timeline
+
+```text
+      M1                     M2                     M3                     M4
+      ●──────────────────────●──────────────────────●──────────────────────●
+   July 2026              Jan 2027               July 2027              Feb 2028
+   MVP Pipeline         AD & Cloud Beta         PRODUCTION           Commercialize
 ```
 
-| Milestone | Codename | Objective | Status |
-|---|---|---|---|
-| **M1** | The Pulse | POC — Linux agent with file & process monitoring | 🟢 In Progress |
-| **M2** | Identity Shield | Windows agent + Active Directory integration | ⬚ Planned |
-| **M3** | The Enforcer | Autonomous remediation via Sigma engine | ⬚ Planned |
-| **M4** | Global Insight | Multi-tenant SaaS platform & attack graph visualization | ⬚ Planned |
+| Milestone | Codename | Primary Objective | Key Deliverables | Status |
+|---|---|---|---|---|
+| **M1** | **The Pulse** | **End-to-End Pipeline** | eBPF/ETW capture, gRPC tunnel, and basic Wails dashboard. | 🟢 In Progress |
+| **M2** | **Identity Shield** | **Infrastructure & AD** | K8s orchestration, AD monitoring (Kerberos/NTLM), and Sigma rules. | ⬚ Planned |
+| **M3** | **The Sentinel** | **Production Go-Live** | IA behavioral scoring, cross-platform correlation, and active remediation. | ⬚ Planned |
+| **M4** | **Orion Prime** | **Market Readiness** | Zero-Trust local decryption, commercial licensing, and expert validation. | ⬚ Planned |
+
+---
+
+### 📂 Repository-Specific Milestones
+
+To maintain high velocity, each module operates on its own technical track:
+
+#### 🛡️ Core Engine (**Bellatrix** & **Betelgeuse**)
+
+* **M1:** Kernel-level interception via eBPF (Linux) and initial ETW identity streams (Windows).
+* **M2:** Deep Active Directory monitoring and local hub encryption logic.
+* **M3:** Implementation of autonomous remediation (Process Kill/Network Block).
+
+#### 🏗️ Infrastructure & APIs (**Alnilam** & **Mintaka**)
+
+* **M1:** Production-grade Kubernetes deployment and ClickHouse schema for high-speed ingestion.
+* **M2:** Security hardening with mTLS and Output API development for PostgreSQL/ClickHouse.
+* **M3:** Global scaling and production monitoring for the SaaS environment.
+
+#### 🧠 Intelligence (**Meissa**)
+
+* **M1:** Integration of the Sigma rule engine for deterministic detection.
+* **M2:** Release of the IA behavioral scoring model and risk prioritization.
+* **M3:** Cross-platform correlation engine (Linux ↔ Windows) to track lateral movements.
+
+#### 🖥️ Dashboard (**Rigel**)
+
+* **M1:** Initial Wails/React application setup with real-time alert streams.
+* **M2:** Advanced data visualization for historical logs and threat hunting.
+* **M3:** Final Zero-Trust module for local decryption and interactive D3.js attack graphs.
 
 ---
 
