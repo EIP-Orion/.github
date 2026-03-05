@@ -34,36 +34,46 @@ Modern cybersecurity suffers from critical fragmentation — **Linux-dominated c
 
 ## 🌠 The Ecosystem
 
-Our architecture is organized into four modules, each named after a star in the Orion constellation:
+Our architecture is organized into six modules, each named after a star in the Orion constellation:
 
 | Repository | Star Role | Description | License |
 |---|---|---|---|
 | ⚔️ **Bellatrix** | Protection & Runtime | The *warrior* — Linux (eBPF) and Windows (ETW) agents built in Go | GPLv2 (Open Source) |
-| 🧠 **Meissa** | Intelligence & Detection | The *brain* — Sigma rules engine and AI-driven behavioral models | Proprietary |
+| 🔴 **Betelgeuse** | Data Hub & Encryption | The *heart* — Agent hub centralizing data flows, encrypting payloads and relaying via mTLS | Proprietary |
+| 🧠 **Meissa** | Intelligence & Detection | The *brain* — Sigma rules engine and AI-driven behavioral models, deployed in a secure enclave | Proprietary |
+| 🔗 **Mintaka** | API Gateway | The *gateway* — Dual API layer: ingestion (Betelgeuse → ClickHouse) and output (ClickHouse → Rigel) | Proprietary |
 | 🖥️ **Rigel** | Interface & Business | The *eye* — React/Next.js dashboard with D3.js threat graph visualization | Proprietary |
 | 🏗️ **Alnilam** | Infrastructure & Cloud | The *backbone* — Terraform/Ansible IaC, CI/CD pipelines, and ClickHouse orchestration | Proprietary |
 
 ```
-                    ┌──────────────┐
-                    │    Rigel     │  Dashboard & Visualization
-                    │  (Next.js)   │
-                    └──────┬───────┘
-                           │ REST / WebSocket
-                    ┌──────┴───────┐
-                    │    Meissa    │  Detection Engine & AI
-                    │   (Go/ML)    │
-                    └──────┬───────┘
-                           │ gRPC (mTLS)
-              ┌────────────┼────────────┐
-              │                         │
-       ┌──────┴───────┐         ┌──────┴───────┐
-       │  Bellatrix   │         │  Bellatrix   │  Endpoint Agents
-       │ (Linux/eBPF) │         │ (Windows/ETW)│
-       └──────────────┘         └──────────────┘
+    ┌──────────────────────────────────────────────────────────────────────┐
+    │              ┌──────────────┐        ╔════════════════════╗          │
+    │              │    Rigel     │        ║  Secure Enclave    ║          │
+    │              │  (Next.js)   │        ║ ┌──────────────┐   ║          │
+    │              └──────┬───────┘        ║ │    Meissa    │   ║          │
+    │                     │ REST / WS      ║ │   (Go/ML)    │   ║          │
+    │              ┌──────┴───────┐  gRPC  ║ └──────────────┘   ║          │
+    │              │   Mintaka    ├───────►║                    ║          │
+    │              │  (APIs/Go)   │        ╚════════════════════╝          │
+    │              └──┬───────┬───┘                                        │
+    │         Output  │       │  Ingestion                                 │
+    │                 │       │                                            │
+    │         ┌───────┘       └───────┐                                    │
+    │   ┌─────┴────────┐       ┌──────┴───────┐                            │
+    │   │  ClickHouse  │◄──────│  Betelgeuse  │  Agent Hub                 │
+    │   │   (OLAP)     │       │  (Go/mTLS)   │  Encrypt & Relay           │
+    │   └──────────────┘       └──────┬───────┘                            │
+    │                                 │ mTLS                               │
+    │                    ┌────────────┼───────────┐                        │
+    │                    │                        │                        │
+    │             ┌──────┴───────┐         ┌──────┴───────┐                │
+    │             │  Bellatrix   │         │  Bellatrix   │  Agents        │
+    │             │ (Linux/eBPF) │         │ (Windows/ETW)│                │
+    │             └──────────────┘         └──────────────┘                │
+    └──────────────────────────────────────────────────────────────────────┘
                            │
                     ┌──────┴───────┐
-                    │   Alnilam   │  Infrastructure & Data
-                    │ (ClickHouse) │
+                    │   Alnilam    │  Infrastructure & IaC
                     └──────────────┘
 ```
 
@@ -85,7 +95,7 @@ Our architecture is organized into four modules, each named after a star in the 
 
 ## 🚀 Getting Started
 
-> **Bellatrix** is the only open-source component. The other modules (Meissa, Rigel, Alnilam) are proprietary and available to authorized contributors only.
+> **Bellatrix** is the only open-source component. The other modules (Betelgeuse, Meissa, Mintaka, Rigel, Alnilam) are proprietary and available to authorized contributors only.
 
 ```bash
 # Clone the open-source agent
@@ -139,7 +149,9 @@ Orion uses a **hybrid licensing** strategy to balance open-source contribution w
 | Component | License |
 |---|---|
 | **Bellatrix** (Agents & eBPF) | [GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) — Open Source |
+| **Betelgeuse** (Agent Hub) | Proprietary |
 | **Meissa** (Detection Engine) | Proprietary |
+| **Mintaka** (API Gateway) | Proprietary |
 | **Rigel** (Dashboard) | Proprietary |
 | **Alnilam** (Infrastructure) | Proprietary |
 
